@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Профіль{% endblock %}
+
+{% block content %}
+<h2>Профіль користувача</h2>
+<p>Ім'я: {{ user.username }}</p>
+<p>Статок: {{ user.wealth }} срібла</p>
+<p>Золото: {{ user.gold }}</p>
+<p>Срібло: {{ user.silver }}</p>
+<img src="{{ user.photo }}" alt="Фото профілю">
+{% endblock %}
