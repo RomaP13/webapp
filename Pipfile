@@ -8,6 +8,7 @@ aiogram = "*"
 django = "*"
 python-dotenv = "*"
 python-decouple = "*"
+mysqlclient = "*"
 
 [dev-packages]
 

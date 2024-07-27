@@ -1,16 +1,25 @@
+from django.contrib.auth import get_user_model, login
+from django.http import HttpRequest, HttpResponse
+from django.http.response import Http404
 from django.shortcuts import render
 
-
-def index(request):
-    return render(request, "index.html")
+User = get_user_model()
 
 
-def profile(request):
-    user = {
-        "username": "test_user",
-        "wealth": 1000,
-        "gold": 10,
-        "silver": 990,
-        "photo": "https://via.placeholder.com/150"
-    }
-    return render(request, "profile.html", {"user": user})
+def index(request: HttpRequest) -> HttpResponse:
+    auth_token = request.GET.get("auth_token")
+    if auth_token:
+        try:
+            user = User.objects.get(auth_token=auth_token)
+            user.backend = "django.contrib.auth.backends.ModelBackend"
+            login(request, user)
+        except User.DoesNotExist:
+            raise Http404("Invalid token")
+    users = User.objects.all()
+    return render(request, "index.html", {"users": users})
+
+
+def profile(request: HttpRequest) -> HttpResponse:
+    if not request.user.is_authenticated:
+        raise Http404("User not authenticated")
+    return render(request, "profile.html")

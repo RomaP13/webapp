@@ -12,8 +12,8 @@
             <h1>WebApp</h1>
             <nav>
                 <ul>
-                    <li><a href="{% url 'index' %}">Головна</a></li>
-                    <li><a href="{% url 'profile' %}">Профіль</a></li>
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li><a href="{% url 'profile' %}?token={{ request.user.auth_token }}">Profile</a></li>
                 </ul>
             </nav>
         </header>

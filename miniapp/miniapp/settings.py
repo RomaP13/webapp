@@ -61,6 +61,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "webapp.context_processors.user_context",
             ],
         },
     },
@@ -74,8 +75,12 @@ WSGI_APPLICATION = "miniapp.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "trading_app",
+        "USER": "mysql_user",
+        "PASSWORD": "mysql_user_password123",
+        "HOST": "localhost",
+        "PORT": "3306",
     }
 }
 
@@ -120,3 +125,5 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "webapp.User"
