@@ -5,7 +5,7 @@
 {% block content %}
 <h2>Профіль користувача</h2>
 <p>Ім'я: {{ cur_user.username }}</p>
-<p>Статок: {{ cur_user.wealth }} срібла</p>
+<p>Статок: {{ cur_user.get_wealth }} срібла</p>
 <p>Золото: {{ cur_user.gold }}</p>
 <p>Срібло: {{ cur_user.silver }}</p>
 {% if cur_user.photo %}
