@@ -11,7 +11,8 @@ from asgiref.sync import sync_to_async
 import django
 from django.contrib.auth import get_user_model
 
-from config import NGROK_TUNNEL_URL, TELEGRAM_BOT_TOKEN
+from config import TELEGRAM_BOT_TOKEN
+from ngrok import get_ngrok_url
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "miniapp.settings")
 django.setup()
@@ -64,6 +65,8 @@ async def send_welcome(message: types.Message):
     auth_token = secrets.token_urlsafe()
     user.auth_token = auth_token
     await sync_to_async(user.save)()
+
+    NGROK_TUNNEL_URL = get_ngrok_url()
 
     keyboard_builder = InlineKeyboardBuilder()
     keyboard_builder.button(

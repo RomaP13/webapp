@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
+from decouple import config
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -19,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-h1bm0s!qod%1-e(5=8o-=f*((0y++16do*h2^g@!2m-q#=nt8k"
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -75,12 +77,12 @@ WSGI_APPLICATION = "miniapp.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "trading_app",
-        "USER": "mysql_user",
-        "PASSWORD": "mysql_user_password123",
-        "HOST": "localhost",
-        "PORT": "3306",
+        "ENGINE": config("MYSQL_ENGINE", default="django.db.backends.mysql"),
+        "NAME": config("MYSQL_DATABASE"),
+        "USER": config("MYSQL_USER"),
+        "PASSWORD": config("MYSQL_PASSWORD"),
+        "HOST": config("MYSQL_HOST", "db"),
+        "PORT": config("MYSQL_PORT", "3306"),
     }
 }
 

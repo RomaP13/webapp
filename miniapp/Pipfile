@@ -9,6 +9,7 @@ django = "*"
 python-dotenv = "*"
 python-decouple = "*"
 mysqlclient = "*"
+requests = "*"
 
 [dev-packages]
 
