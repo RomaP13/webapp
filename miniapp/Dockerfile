@@ -16,7 +16,6 @@ COPY ngrok.py /app/ngrok.py
 
 # Copy initialization script
 COPY init_db.sh /init_db.sh
-COPY init.sql /init.sql
 
 RUN chmod +x /init_db.sh
 

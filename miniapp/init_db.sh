@@ -7,8 +7,16 @@ until mysql -h "db" -u root -e "SHOW DATABASES;"; do
   sleep 1
 done
 
-# Run initial SQL script with root privileges
-mysql -h "db" -u root < init.sql
+# Generate init.sql dynamically using environment variables
+cat <<EOF > /tmp/init.sql
+CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
+CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
+GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%';
+FLUSH PRIVILEGES;
+EOF
+
+# Run the generated SQL script with root privileges
+mysql -h "db" -u root < /tmp/init.sql
 
 # Run Django migrations
 python manage.py makemigrations
