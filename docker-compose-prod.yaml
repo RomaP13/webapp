@@ -1,0 +1,56 @@
+version: "3"
+
+services:
+  web:
+    image: romanpomazan/app:django
+    volumes:
+      - ./web:/web
+    ports:
+      - 8000:8000
+    container_name: django_container
+    command: >
+      sh -c "/init_db.sh && python manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+
+  db:
+    image: mysql:8.2.0
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE} 
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ALLOW_EMPTY_PASSWORD: "false"
+    volumes:
+      - ./data/mysql/db:/var/lib/mysql
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  bot:
+    image: romanpomazan/miniapp-bot:latest
+    command: python bot.py
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - web
+      - ngrok
+
+  ngrok:
+    image: wernight/ngrok
+    ports:
+      - "4040:4040"
+    environment:
+      NGROK_PORT: web:8000
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+    env_file:
+      - .env
+    command: ngrok http web:8000
